@@ -34,6 +34,11 @@ jobs:
           # کپی کردن فایل‌های شما به پروژه
           cp -r ../* www/ || true
           rm -rf www/myapp www/.github
+          
+          # اضافه کردن پلاگین‌های دسترسی به حافظه گوشی
+          cordova plugin add cordova-plugin-file
+          cordova plugin add cordova-plugin-android-permissions
+          
           # اضافه کردن اندروید و خروجی گرفتن
           cordova platform add android
           cordova build android --debug
