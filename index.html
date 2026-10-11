@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html dir="rtl" lang="fa">
 <head>
+  <script src="cordova.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>میزان — پخش‌کننده تراز خودکار</title>
@@ -1059,5 +1060,23 @@
   loadExisting();
 })();
 </script>
+  <script>
+document.addEventListener('deviceready', onDeviceReady, false);
+
+function onDeviceReady() {
+    var permissions = window.cordova.plugins.permissions;
+    permissions.requestPermission(permissions.READ_EXTERNAL_STORAGE, success, error);
+
+    function success(status) {
+        if(status.hasPermission) {
+            // کد اسکن کردن آهنگ‌ها اینجا قرار می‌گیرد
+            console.log("دسترسی داده شد");
+        }
+    }
+    function error() {
+        alert('دسترسی تایید نشد');
+    }
+}
+  </script>
 </body>
 </html>
