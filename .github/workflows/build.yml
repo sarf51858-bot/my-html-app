@@ -1,12 +1,11 @@
 name: Build Android APK
 
 on:
-  workflow_dispatch: # امکان اجرای دستی
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -25,26 +24,22 @@ jobs:
       - name: Install Cordova
         run: npm install -g cordova
 
-      - name: Create Cordova Project and Build APK
+      - name: Create Project and Add Plugins
         run: |
-          cordova create myapp com.example.myapp "My App"
+          cordova create myapp com.sarf.music "Music Player"
           cd myapp
-          # حذف فایل‌های پیش‌فرض
           rm -rf www/*
-          # کپی کردن فایل‌های شما به پروژه
           cp -r ../* www/ || true
-          rm -rf www/myapp www/.github
-          
-          # اضافه کردن پلاگین‌های دسترسی به حافظه گوشی
+          # نصب پلاگین‌های حیاتی برای دسترسی به حافظه
           cordova plugin add cordova-plugin-file
           cordova plugin add cordova-plugin-android-permissions
-          
-          # اضافه کردن اندروید و خروجی گرفتن
           cordova platform add android
+          # تنظیم دسترسی در فایل مانیفست
+          sed -i '/<\/manifest>/i <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />' platforms/android/app/src/main/AndroidManifest.xml
           cordova build android --debug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: app-debug
+          name: MusicPlayer-Debug
           path: myapp/platforms/android/app/build/outputs/apk/debug/app-debug.apk
